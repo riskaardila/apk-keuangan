@@ -6,13 +6,11 @@ import 'package:flutter_application/theme.dart';
 import 'package:provider/provider.dart';
 
 class SignInPage extends StatelessWidget {
-
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
-
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     handleSignIn() async {
       if (await authProvider.login(
@@ -28,7 +26,7 @@ class SignInPage extends StatelessWidget {
             ),
           ),
         );
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/splash-login');
       }
     }
 
@@ -52,7 +50,7 @@ class SignInPage extends StatelessWidget {
             ),
             Text(
               'Sign In to Continue',
-              style: subtitleTextStyle,
+              style: secondaryTextStyle,
             ),
           ],
         ),
@@ -81,15 +79,17 @@ class SignInPage extends StatelessWidget {
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
-                color: backgroundColor2,
+                color: backgroundColorform,
                 borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.orange),
               ),
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/icon_email.png',
-                      width: 17,
+                    Icon(
+                      Icons.email_rounded,
+                      size: 20,
+                      color: orangeColor,
                     ),
                     SizedBox(
                       width: 16,
@@ -136,15 +136,17 @@ class SignInPage extends StatelessWidget {
                 horizontal: 16,
               ),
               decoration: BoxDecoration(
-                color: backgroundColor2,
+                color: backgroundColorform,
                 borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.orange),
               ),
               child: Center(
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/icon_password.png',
-                      width: 17,
+                    Icon(
+                      Icons.lock,
+                      size: 20,
+                      color: orangeColor,
                     ),
                     SizedBox(
                       width: 16,
@@ -180,7 +182,7 @@ class SignInPage extends StatelessWidget {
             handleSignIn();
           },
           style: TextButton.styleFrom(
-            backgroundColor: primaryColor,
+            backgroundColor: orangeColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
@@ -226,7 +228,7 @@ class SignInPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: backgroundColor1,
+        backgroundColor: backgroundColor0,
         body: Container(
           margin: EdgeInsets.symmetric(
             horizontal: defaultMargin,

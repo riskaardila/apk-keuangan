@@ -1,6 +1,6 @@
 class AdmissionFeeModel{
   int id;
-  int usersId;
+  String usersId;
   String name;
   String description;
   String price;

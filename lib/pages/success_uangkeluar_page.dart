@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/theme.dart';
 
-class SuccessPage extends StatelessWidget {
+class SuccessMoneyOutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget header() {
@@ -28,7 +28,7 @@ class SuccessPage extends StatelessWidget {
               height: 20,
             ),
             Text(
-              'Admission Fee Created',
+              'Expenses Fee Created',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -38,7 +38,7 @@ class SuccessPage extends StatelessWidget {
               height: 12,
             ),
             Text(
-              'Your Admission Fee was successfully created',
+              'Your MExpenses Fee was successfully created',
               style: secondaryTextStyle,
               textAlign: TextAlign.center,
             ),

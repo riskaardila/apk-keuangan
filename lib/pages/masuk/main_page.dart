@@ -1,35 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_application/providers/auth_provider.dart';
+import 'package:flutter_application/providers/uang_masuk_provider.dart';
 import 'package:flutter_application/theme.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class SignUpPage extends StatelessWidget {
+class UangMasuk extends StatefulWidget {
+  @override
+  State<UangMasuk> createState() => _UangMasukState();
+}
+
+class _UangMasukState extends State<UangMasuk> {
   TextEditingController nameController = TextEditingController(text: '');
-  TextEditingController emailController = TextEditingController(text: '');
-  TextEditingController passwordController = TextEditingController(text: '');
+
+  TextEditingController descriptionController = TextEditingController(text: '');
+
+  TextEditingController priceController = TextEditingController(text: '');
+
+  TextEditingController dateController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
+    UangMasukProvider uangMasukProvider =
+        Provider.of<UangMasukProvider>(context);
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    handleSignUp() async {
-      if (await authProvider.register(
-        name: nameController.text,
-        email: emailController.text,
-        password: passwordController.text,
-        confirmPassword: passwordController.text,
+
+    handleSubmit() async {
+      if (await uangMasukProvider.uangMasuk(
+        authProvider.user.token,
+        nameController.text,
+        descriptionController.text,
+        priceController.text,
+        dateController.text,
       )) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.green,
             content: Text(
-              'Register Successfully!',
+              'Admission Fee Created',
               textAlign: TextAlign.center,
             ),
           ),
         );
-        Navigator.pushNamed(context, '/splash-login');
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/success', (route) => false);
       }
     }
 
@@ -42,7 +57,7 @@ class SignUpPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Sign Up',
+              'Add New Admission Fee',
               style: primaryTextStyle.copyWith(
                 fontSize: 24,
                 fontWeight: semiBold,
@@ -52,7 +67,7 @@ class SignUpPage extends StatelessWidget {
               height: 2,
             ),
             Text(
-              'Sign Up to Continue',
+              'Add New Admission Fee to Continue',
               style: secondaryTextStyle,
             ),
           ],
@@ -62,12 +77,12 @@ class SignUpPage extends StatelessWidget {
 
     Widget nameInput() {
       return Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(top: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Full Name',
+              'Admission Fee',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -84,25 +99,23 @@ class SignUpPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: backgroundColorform,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.orange),
               ),
               child: Center(
                 child: Row(
                   children: [
                     Icon(
-                      Icons.person_2_rounded,
-                      size: 20,
+                      Icons.assignment_outlined,
                       color: orangeColor,
                     ),
                     SizedBox(
-                      width: 16,
+                      width: 8,
                     ),
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
                         controller: nameController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Full Name',
+                          hintText: 'Enter Admission Fee',
                           hintStyle: subtitleTextStyle,
                           border: InputBorder.none,
                         ),
@@ -117,14 +130,14 @@ class SignUpPage extends StatelessWidget {
       );
     }
 
-    Widget emailInput() {
+    Widget priceInput() {
       return Container(
         margin: EdgeInsets.only(top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Email Address',
+              'Price',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -141,25 +154,23 @@ class SignUpPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: backgroundColorform,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.orange),
               ),
               child: Center(
                 child: Row(
                   children: [
                     Icon(
-                      Icons.email_rounded,
-                      size: 20,
+                      Icons.attach_money,
                       color: orangeColor,
                     ),
                     SizedBox(
-                      width: 16,
+                      width: 8,
                     ),
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
-                        controller: emailController,
+                        controller: priceController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Email Address',
+                          hintText: 'Enter Admission Fee',
                           hintStyle: subtitleTextStyle,
                           border: InputBorder.none,
                         ),
@@ -174,14 +185,14 @@ class SignUpPage extends StatelessWidget {
       );
     }
 
-    Widget passwordInput() {
+    Widget descriptionInput() {
       return Container(
         margin: EdgeInsets.only(top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Password',
+              'Description',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -198,14 +209,12 @@ class SignUpPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: backgroundColorform,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.orange),
               ),
               child: Center(
                 child: Row(
                   children: [
                     Icon(
-                      Icons.lock,
-                      size: 20,
+                      Icons.description,
                       color: orangeColor,
                     ),
                     SizedBox(
@@ -214,10 +223,9 @@ class SignUpPage extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
-                        obscureText: true,
-                        controller: passwordController,
+                        controller: descriptionController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Password',
+                          hintText: 'Enter Description',
                           hintStyle: subtitleTextStyle,
                           border: InputBorder.none,
                         ),
@@ -232,14 +240,15 @@ class SignUpPage extends StatelessWidget {
       );
     }
 
-    Widget passwordConfirmInput() {
+    // make choose date picker
+    Widget dateInput() {
       return Container(
         margin: EdgeInsets.only(top: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Password Confirmation',
+              'Date',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
                 fontWeight: medium,
@@ -256,29 +265,39 @@ class SignUpPage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: backgroundColorform,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.orange),
               ),
               child: Center(
                 child: Row(
                   children: [
                     Icon(
-                      Icons.lock,
-                      size: 20,
+                      Icons.date_range,
                       color: orangeColor,
                     ),
                     SizedBox(
-                      width: 16,
+                      width: 8,
                     ),
                     Expanded(
                       child: TextFormField(
                         style: primaryTextStyle,
-                        obscureText: true,
-                        controller: passwordController,
+                        controller: dateController,
                         decoration: InputDecoration.collapsed(
-                          hintText: 'Your Password',
+                          hintText: 'yyyy-mm-dd',
                           hintStyle: subtitleTextStyle,
                           border: InputBorder.none,
                         ),
+                        onTap: () async {
+                          DateTime pickdate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2025));
+                          if (pickdate != null) {
+                            setState(() {
+                              dateController.text =
+                                  DateFormat('yyyy-MM-dd').format(pickdate);
+                            });
+                          }
+                        },
                       ),
                     )
                   ],
@@ -290,14 +309,16 @@ class SignUpPage extends StatelessWidget {
       );
     }
 
-    Widget signInButton() {
+    Widget saveButton() {
       return Container(
         height: 50,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(
+          top: 30,
+        ),
         child: TextButton(
           onPressed: () {
-            handleSignUp();
+            handleSubmit();
           },
           style: TextButton.styleFrom(
             backgroundColor: orangeColor,
@@ -306,7 +327,7 @@ class SignUpPage extends StatelessWidget {
             ),
           ),
           child: Text(
-            'Sign Up',
+            'Save',
             style: primaryTextStyle.copyWith(
               fontSize: 16,
               fontWeight: medium,
@@ -316,35 +337,30 @@ class SignUpPage extends StatelessWidget {
       );
     }
 
-    Widget footer() {
-      return Container(
-        margin: EdgeInsets.only(bottom: 30),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Already have an account? ',
-              style: subtitleTextStyle.copyWith(fontSize: 12),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, '/sign-in');
-              },
-              child: Text(
-                'Sign In',
-                style: purpleTextStyle.copyWith(
-                  fontSize: 12,
-                  fontWeight: medium,
-                ),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return SafeArea(
       child: Scaffold(
+        floatingActionButton: SpeedDial(
+          icon: Icons.mode_rounded,
+          backgroundColor: orangeColor,
+          overlayColor: orangeColor,
+          overlayOpacity: 0.4,
+          children: [
+            SpeedDialChild(
+              child: Icon(Icons.add_card_rounded),
+              label: 'Expenses Fee',
+              //backgroundColor: Colors.green,
+              onTap: () {
+                Navigator.pushNamed(context, '/uang-keluar');
+              },
+            ),
+            SpeedDialChild(
+              child: Icon(Icons.home_outlined),
+              label: 'Home',
+              onTap: () => Navigator.pushNamed(context, '/home'),
+              //backgroundColor: Colors.red,
+            )
+          ],
+        ),
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: Container(
@@ -352,16 +368,13 @@ class SignUpPage extends StatelessWidget {
             horizontal: defaultMargin,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               header(),
               nameInput(),
-              emailInput(),
-              passwordInput(),
-              passwordConfirmInput(),
-              signInButton(),
-              Spacer(),
-              footer()
+              priceInput(),
+              descriptionInput(),
+              dateInput(),
+              saveButton(),
             ],
           ),
         ),
